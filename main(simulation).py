@@ -42,15 +42,15 @@ def yearEnd():
     cur.execute(DataGenerator.assignGrades())
     ...
 
-
-year = 0
 # initialization()
-while (year < 10):
-    yearStart()
-    yearMiddle()
-    yearEnd()
+season = ["Fall","Spring"]
 
-    year += 1
+for year in range (2015,2020):
+    for semester in season:
+        print("It is "+semester+", "+str(year))
+        yearStart()
+        yearMiddle()
+        yearEnd()
 
 # Capture the final state of the DB and put in the report
 
