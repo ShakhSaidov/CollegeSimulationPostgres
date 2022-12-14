@@ -1,5 +1,10 @@
 import psycopg2
-#import DataGenerator
+import DataGenerator
+
+#create tables 
+DataGenerator.initialize()
+
+'''
 
 # Connect to DB
 conn = psycopg2.connect(
@@ -9,21 +14,6 @@ conn = psycopg2.connect(
     password="postgre$320")
 
 cur = conn.cursor()
-
-# execute a statement
-print('PostgreSQL database version:')
-cur.execute('SELECT version()')
-
-# display the PostgreSQL database server version
-db_version = cur.fetchone()
-print(db_version)
-
-# close the communication with the PostgreSQL
-cur.close()
-
-conn.close()
-
-'''
 
 def yearStart():
     cur.execute(DataGenerator.addStudents())
@@ -42,7 +32,6 @@ def yearEnd():
     cur.execute(DataGenerator.assignGrades())
     ...
 
-# initialization()
 season = ["Fall","Spring"]
 
 for year in range (2015,2020):
@@ -54,5 +43,16 @@ for year in range (2015,2020):
 
 # Capture the final state of the DB and put in the report
 
+# display the PostgreSQL database server version
+#db_version = cur.fetchone()
+#print(db_version)
+
+# close the communication with the PostgreSQL
+cur.close()
+
+conn.close()
+
 '''
+
+
 
