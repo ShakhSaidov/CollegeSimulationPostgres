@@ -190,7 +190,7 @@ def addStudentProfile(connection):
 # NON-STATIC DATA
 #||||||||||||||||||||||||||||||||||||
 
-def initializeStatic():
+def initializeNonStatic():
     conn = psycopg2.connect(
         host="localhost",
         database="Simulation",
