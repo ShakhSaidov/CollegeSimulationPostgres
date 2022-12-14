@@ -1,6 +1,6 @@
 import psycopg2
 
-def initialize():
+def initializeStatic():
     conn = psycopg2.connect(
         host="localhost",
         database="Simulation",
@@ -185,3 +185,77 @@ def addStudentProfile(connection):
         cur.copy_from(f, 'studentProfile', sep=',')
 
     connection.commit()
+
+#||||||||||||||||||||||||||||||||||||
+# NON-STATIC DATA
+#||||||||||||||||||||||||||||||||||||
+
+def initializeStatic():
+    conn = psycopg2.connect(
+        host="localhost",
+        database="Simulation",
+        user="postgres",
+        password="postgre$320")
+
+    addStudentClub(conn)
+
+    conn.close()
+
+
+# populating student club
+def addStudentClub(connection):
+    # studentsIDList = list of students ID (L number) from students table
+    # clubIDList = list of club Ids from clubs table
+    # membershipNames = list of names from general CSV file
+    # amount = random number < studentsList.length
+    # count = 1
+    
+    # while (count < amount):
+    #   currID = studentsIDList[count]
+    #   randomClub = random club chosen from clubIDList
+    #   randomMembershipTitle = random membership title chosen from membershipNames
+    #   
+    #   cur = connection.cursor()
+    #   cur.execute(INSERT INTO StudentClub Values ________ )
+    #   connection.commit()
+
+    return 0
+
+# populating student club
+def addStudentJob(connection):
+    # studentsIDList = list of students ID (L number) from students table
+    # JobList = list of jobs and their sponsorDepName from jobs table
+    # amount = random number < studentsList.length
+    # count = 1
+    
+    # while (count < amount):
+    #   currID = studentsIDList[count]
+    #   randomJob = random job chosen from jobList
+    #   randomSponsorDepName = random sponsor name based on randomJob above
+    #   
+    #   cur = connection.cursor()
+    #   cur.execute(INSERT INTO StudentJob Values ________ )
+    #   connection.commit()
+
+    return 0
+
+# populating student club
+def addEvents(connection):
+    # eventNames = list from column from General CSV file
+    # locations = list from column from General CSV file
+    # dates = list from column from General CSV file
+
+    # randomAmount = random number of events to add
+    # count = 1
+    
+    # while (count < randomAmount):
+    #   eventID = make a new random ID
+    #   randomName = random name chosen from eventNames
+    #   randomLocation = chosen from locations
+    #   randomDates = chosen from dates
+
+    #   cur = connection.cursor()
+    #   cur.execute(INSERT INTO Events Values ________ )
+    #   connection.commit()
+
+    return 0

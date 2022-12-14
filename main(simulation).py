@@ -2,7 +2,9 @@ import psycopg2
 import DataGenerator
 
 #create tables 
-DataGenerator.initialize()
+DataGenerator.initializeStatic()
+DataGenerator.initializeNonStatic()
+
 
 '''
 
