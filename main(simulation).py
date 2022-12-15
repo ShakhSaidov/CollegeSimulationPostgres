@@ -1,9 +1,11 @@
 import psycopg2
 import DataGenerator
+import TableCreator
 
 #create tables 
+TableCreator.createTables()
 DataGenerator.initializeStatic()
-DataGenerator.initializeNonStatic()
+#DataGenerator.initializeNonStatic()
 
 
 '''

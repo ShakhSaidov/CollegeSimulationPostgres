@@ -1,3 +1,3 @@
-Hall_name,Tier,Capacity,Coed,St. Address Name,St. Address Number ,,Hall Type,Accessibility,Laundry,Kitchen
-Watson,4,120,NO,111,Quad Drive,,Residential,YES,3,2
-Conway,2,120,NO,120,South Drive,,Off-campus,NO,6,1
+Hall_name,Tier,Capacity,Coed,St. Address Number,St. Address Name,Hall Type,Accessibility,Laundry,Kitchen
+Watson,4,120,NO,111,Quad Drive,Residential,YES,3,2
+Conway,2,120,NO,120,South Drive,Off-campus,NO,6,1

@@ -1,6 +1,6 @@
-Clubs_ID,Club Name,Club_Head,Website Email Address,Phone Number
-1,ISA,Yazdan,ISA.laf.net,4837246283
-2,MSA,Yaseen,MSA.laf.net,2165318216
-3,SASA,Ali,SASA.LAF.NET,8372843274
-4,LOST,Khalid,LOST.LAF.NET,2713817398
-5,French,Olivia ,Fren.laf.net,2983272937
+Clubs_ID,Club Name,Club_Head,Website,Email Address,Phone Number
+1,ISA,Yazdan,ISA.laf.net,ISA@laf.net,4837246283
+2,MSA,Yaseen,MSA.laf.net,MSA@laf.net,2165318216
+3,SASA,Ali,SASA.LAF.NET,SASA@LAF.NET,8372843274
+4,LOST,Khalid,LOST.LAF.NET,LOST@LAF.NET,2713817398
+5,French,Olivia,Fren.laf.net,Fren@laf.net,2983272937

@@ -7,13 +7,13 @@ def initializeStatic():
         user="postgres",
         password="postgre$320")
 
-    addClubs(conn)
-    addCourseAtt(conn)
-    addCourseInfo(conn)
-    addCoursePrereq(conn)
-    addDepartments(conn)
-    addHallInfo(conn)
-    addHallInfo(conn)
+    #addClubs(conn)
+    #addCourseAtt(conn)
+    #addCourseInfo(conn)
+    #addCoursePrereq(conn)
+    #addDepartments(conn)
+    #addHallInfo(conn)
+    addHallRoom(conn)
     addJobs(conn)
     addLibraries(conn)
     addLibraryItems(conn)
@@ -42,7 +42,7 @@ def addCourseAtt(connection):
 
     with open('Data/CourseAtt.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'courseAtt', sep=',')
+        cur.copy_from(f, 'course_attributes', sep=',')
 
     connection.commit()
 
@@ -50,9 +50,9 @@ def addCourseAtt(connection):
 def addCourseInfo(connection):
     cur = connection.cursor()
 
-    with open('Data/CourseInfo.csv', 'r') as f:
+    with open('Data/CourseProfile.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'courseInfo', sep=',')
+        cur.copy_from(f, 'course_profile', sep=',')
 
     connection.commit()
 
@@ -62,7 +62,7 @@ def addCoursePrereq(connection):
 
     with open('Data/CoursePrereq.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'coursePrereq', sep=',')
+        cur.copy_from(f, 'course_prerequisites', sep=',')
 
     connection.commit()
 
@@ -82,7 +82,7 @@ def addHallInfo(connection):
 
     with open('Data/HallInfo.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'hallInfo', sep=',')
+        cur.copy_from(f, 'hall_info', sep=',')
 
     connection.commit()
 
@@ -92,7 +92,7 @@ def addHallRoom(connection):
 
     with open('Data/HallRoom.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'hallRoom', sep=',')
+        cur.copy_from(f, 'hall_room', sep=',')
 
     connection.commit()
 
@@ -122,7 +122,7 @@ def addLibraryItems(connection):
 
     with open('Data/LibraryItems.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'libraryItems', sep=',')
+        cur.copy_from(f, 'library_items', sep=',')
 
     connection.commit()
 
@@ -142,7 +142,7 @@ def addMajorAttReq(connection):
 
     with open('Data/MajorAttReq.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'majorAttReq', sep=',')
+        cur.copy_from(f, 'major_attribute_requirement', sep=',')
 
     connection.commit()
 
@@ -152,7 +152,7 @@ def addMajorCourseReq(connection):
 
     with open('Data/MajorCourseReq.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'majorCourseReq', sep=',')
+        cur.copy_from(f, 'major_course_requirement', sep=',')
 
     connection.commit()
 
@@ -162,7 +162,7 @@ def addResLifeStaff(connection):
 
     with open('Data/ResLifeStaff.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'resLifeStaff', sep=',')
+        cur.copy_from(f, 'reslife_staff', sep=',')
 
     connection.commit()
 
@@ -172,7 +172,7 @@ def addStaffProfile(connection):
 
     with open('Data/StaffProfile.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'staffProfile', sep=',')
+        cur.copy_from(f, 'staff_profile', sep=',')
 
     connection.commit()
 
@@ -182,7 +182,7 @@ def addStudentProfile(connection):
 
     with open('Data/StudentProfile.csv', 'r') as f:
         next(f)  # Skip the header row.
-        cur.copy_from(f, 'studentProfile', sep=',')
+        cur.copy_from(f, 'student_profile', sep=',')
 
     connection.commit()
 
