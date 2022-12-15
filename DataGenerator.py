@@ -7,12 +7,12 @@ def initializeStatic():
         user="postgres",
         password="postgre$320")
 
-    #addClubs(conn)
-    #addCourseAtt(conn)
-    #addCourseInfo(conn)
-    #addCoursePrereq(conn)
-    #addDepartments(conn)
-    #addHallInfo(conn)
+    addClubs(conn)
+    addCourseAtt(conn)
+    addCourseInfo(conn)
+    addCoursePrereq(conn)
+    addDepartments(conn)
+    addHallInfo(conn)
     addHallRoom(conn)
     addJobs(conn)
     addLibraries(conn)

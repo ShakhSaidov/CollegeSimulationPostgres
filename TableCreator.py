@@ -21,7 +21,7 @@ clubs = (
     )""",
 
     """CREATE TABLE club_members(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         clubID          INT NOT NULL,
         memTitle        VARCHAR(1024) NOT NULL,
         PRIMARY KEY(lNumber, clubID)
@@ -29,7 +29,7 @@ clubs = (
 )
 degreeCompletion = (
     """CREATE TABLE staff_profile(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         department      VARCHAR(1024) NOT NULL,
         fName           VARCHAR(1024) NOT NULL,
         mName           VARCHAR(1024) NOT NULL,
@@ -37,7 +37,7 @@ degreeCompletion = (
         dob             VARCHAR(1024) NOT NULL,
         email           VARCHAR(1024) NOT NULL,
         phoneNo         VARCHAR(1024) NOT NULL,
-        emergencyNo     INT NOT NULL,
+        emergencyNo     VARCHAR(1024) NOT NULL,
         PRIMARY KEY(lNumber)
     )""",
 
@@ -55,7 +55,7 @@ degreeCompletion = (
     )""",
 
     """CREATE TABLE grade_report(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         sectNum         INT NOT NULL,
         grade           VARCHAR(1024) NOT NULL,
         PRIMARY KEY(lNumber, sectNum)
@@ -89,7 +89,7 @@ degreeCompletion = (
     )""",
 
     """CREATE TABLE student_courses(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         semester        VARCHAR(1024) NOT NULL,
         year            INT NOT NULL,
         courseCRN       INT NOT NULL,
@@ -109,7 +109,7 @@ degreeCompletion = (
         deptName        VARCHAR(1024) NOT NULL,
         facultyName     VARCHAR(1024) NOT NULL,
         jobDescr        VARCHAR(1024) NOT NULL,
-        comp            INT NOT NULL,
+        comp            DECIMAL NOT NULL,
         hours           INT NOT NULL,
         PRIMARY KEY(jobName)
     )"""
@@ -133,7 +133,7 @@ libraryServices = (
 
     """CREATE TABLE library_services(
         serviceID       INT NOT NULL,
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         serviceName     VARCHAR(1024) NOT NULL,
         libraryID       INT NOT NULL,
         PRIMARY KEY(serviceID)
@@ -142,7 +142,7 @@ libraryServices = (
     """CREATE TABLE library_loans(
         itemID          INT NOT NULL,
         libraryID       INT NOT NULL,
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         dateOut         VARCHAR(1024) NOT NULL,
         dateDue         VARCHAR(1024) NOT NULL,
         dateIn          VARCHAR(1024) NOT NULL,
@@ -182,7 +182,7 @@ residenceHalls = (
 )
 students = (
     """CREATE TABLE student_profile(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         fName           VARCHAR(1024) NOT NULL,
         mName           VARCHAR(1024) NOT NULL,
         lName           VARCHAR(1024) NOT NULL,
@@ -196,7 +196,7 @@ students = (
     )""",
 
     """CREATE TABLE student_semester(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         semester        VARCHAR(1024) NOT NULL,
         year            INT NOT NULL,
         financial       VARCHAR(1024) NOT NULL,
@@ -212,7 +212,7 @@ students = (
     )""",
 
     """CREATE TABLE student_job(
-        lNumber         INT NOT NULL,
+        lNumber         BIGINT NOT NULL,
         title           VARCHAR(1024) NOT NULL,
         sponsor         VARCHAR(1024) NOT NULL,
         PRIMARY KEY(lNumber, title)
