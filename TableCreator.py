@@ -183,8 +183,8 @@ residenceHalls = (
 students = (
     """CREATE TABLE student_profile(
         lNumber         BIGINT NOT NULL,
+        department      VARCHAR(1024) NOT NULL,
         fName           VARCHAR(1024) NOT NULL,
-        mName           VARCHAR(1024) NOT NULL,
         lName           VARCHAR(1024) NOT NULL,
         dob             DATE NOT NULL,
         major           VARCHAR(1024) NOT NULL,
