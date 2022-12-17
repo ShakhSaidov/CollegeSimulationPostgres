@@ -1,4 +1,6 @@
 import psycopg2
+import random
+
 
 def initializeStatic():
     conn = psycopg2.connect(
@@ -27,6 +29,8 @@ def initializeStatic():
     conn.close()
 
 # populating clubs table
+
+
 def addClubs(connection):
     cur = connection.cursor()
 
@@ -37,6 +41,8 @@ def addClubs(connection):
     connection.commit()
 
 # populating course attributes table
+
+
 def addCourseAtt(connection):
     cur = connection.cursor()
 
@@ -47,6 +53,8 @@ def addCourseAtt(connection):
     connection.commit()
 
 # populating course information table
+
+
 def addCourseInfo(connection):
     cur = connection.cursor()
 
@@ -57,6 +65,8 @@ def addCourseInfo(connection):
     connection.commit()
 
 # populating course prerequisites table
+
+
 def addCoursePrereq(connection):
     cur = connection.cursor()
 
@@ -67,6 +77,8 @@ def addCoursePrereq(connection):
     connection.commit()
 
 # populating departments table
+
+
 def addDepartments(connection):
     cur = connection.cursor()
 
@@ -77,6 +89,8 @@ def addDepartments(connection):
     connection.commit()
 
 # populating residence hall information table
+
+
 def addHallInfo(connection):
     cur = connection.cursor()
 
@@ -87,6 +101,8 @@ def addHallInfo(connection):
     connection.commit()
 
 # populating residence hall rooms table
+
+
 def addHallRoom(connection):
     cur = connection.cursor()
 
@@ -97,6 +113,8 @@ def addHallRoom(connection):
     connection.commit()
 
 # populating jobs table
+
+
 def addJobs(connection):
     cur = connection.cursor()
 
@@ -107,6 +125,8 @@ def addJobs(connection):
     connection.commit()
 
 # populating libraries table
+
+
 def addLibraries(connection):
     cur = connection.cursor()
 
@@ -117,6 +137,8 @@ def addLibraries(connection):
     connection.commit()
 
 # populating library items table
+
+
 def addLibraryItems(connection):
     cur = connection.cursor()
 
@@ -127,6 +149,8 @@ def addLibraryItems(connection):
     connection.commit()
 
 # populating major table
+
+
 def addMajor(connection):
     cur = connection.cursor()
 
@@ -137,6 +161,8 @@ def addMajor(connection):
     connection.commit()
 
 # populating major attribute requirement table
+
+
 def addMajorAttReq(connection):
     cur = connection.cursor()
 
@@ -147,6 +173,8 @@ def addMajorAttReq(connection):
     connection.commit()
 
 # populating major course requirement table
+
+
 def addMajorCourseReq(connection):
     cur = connection.cursor()
 
@@ -157,6 +185,8 @@ def addMajorCourseReq(connection):
     connection.commit()
 
 # populating residence life staff table
+
+
 def addResLifeStaff(connection):
     cur = connection.cursor()
 
@@ -167,6 +197,8 @@ def addResLifeStaff(connection):
     connection.commit()
 
 # populating staff profile table
+
+
 def addStaffProfile(connection):
     cur = connection.cursor()
 
@@ -177,6 +209,8 @@ def addStaffProfile(connection):
     connection.commit()
 
 # populating student profile table
+
+
 def addStudentProfile(connection):
     cur = connection.cursor()
 
@@ -186,9 +220,10 @@ def addStudentProfile(connection):
 
     connection.commit()
 
-#||||||||||||||||||||||||||||||||||||
+# ||||||||||||||||||||||||||||||||||||
 # NON-STATIC DATA
-#||||||||||||||||||||||||||||||||||||
+# ||||||||||||||||||||||||||||||||||||
+
 
 def initializeNonStatic():
     conn = psycopg2.connect(
@@ -197,7 +232,7 @@ def initializeNonStatic():
         user="postgres",
         password="postgre$320")
 
-    addStudentClub(conn)
+    addStudentJobs(conn)
 
     conn.close()
 
@@ -209,12 +244,12 @@ def addStudentClub(connection):
     # membershipNames = list of names from general CSV file
     # amount = random number < studentsList.length
     # count = 1
-    
+
     # while (count < amount):
     #   currID = studentsIDList[count]
     #   randomClub = random club chosen from clubIDList
     #   randomMembershipTitle = random membership title chosen from membershipNames
-    #   
+    #
     #   cur = connection.cursor()
     #   cur.execute(INSERT INTO StudentClub Values ________ )
     #   connection.commit()
@@ -222,24 +257,41 @@ def addStudentClub(connection):
     return 0
 
 # populating student club
-def addStudentJob(connection):
-    # studentsIDList = list of students ID (L number) from students table
-    # JobList = list of jobs and their sponsorDepName from jobs table
-    # amount = random number < studentsList.length
-    # count = 1
-    
-    # while (count < amount):
-    #   currID = studentsIDList[count]
-    #   randomJob = random job chosen from jobList
-    #   randomSponsorDepName = random sponsor name based on randomJob above
-    #   
-    #   cur = connection.cursor()
-    #   cur.execute(INSERT INTO StudentJob Values ________ )
-    #   connection.commit()
 
-    return 0
 
-# populating student club
+def addStudentJobs(connection):
+    cur = connection.cursor()
+    connection.autocommit = True
+
+    cur.execute("SELECT lnumber from student_profile")
+    studentsList = cur.fetchall()
+    studentsList = [x[0] for x in studentsList]
+
+    cur.execute("SELECT jobname, deptname from jobs")
+    jobsList = cur.fetchall()
+    jobsList = [x[0] for x in jobsList]
+
+    cur.execute("SELECT deptname from jobs")
+    jobDeptNameList = cur.fetchall()
+    jobDeptNameList = [x[0] for x in jobDeptNameList]
+
+    studentWithJobsAmount = random.randint(0, len(studentsList) / 2)
+    count = 1
+
+    while (count < studentWithJobsAmount):
+        currentStudent = studentsList[count]
+        randomJob = random.randint(0, len(jobsList))
+
+        currentJob = jobsList[randomJob-1]
+        currentJobDeptName = jobDeptNameList[randomJob-1]
+
+        query = """INSERT INTO student_job VALUES (%s,%s,%s)"""
+        insertValues = (currentStudent, currentJob, currentJobDeptName)
+        cur.execute(query, insertValues)
+
+        count += 1
+
+
 def addEvents(connection):
     # eventNames = list from column from General CSV file
     # locations = list from column from General CSV file
@@ -247,7 +299,7 @@ def addEvents(connection):
 
     # randomAmount = random number of events to add
     # count = 1
-    
+
     # while (count < randomAmount):
     #   eventID = make a new random ID
     #   randomName = random name chosen from eventNames

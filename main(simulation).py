@@ -3,9 +3,9 @@ import DataGenerator
 import TableCreator
 
 #create tables 
-TableCreator.createTables()
-DataGenerator.initializeStatic()
-#DataGenerator.initializeNonStatic()
+#TableCreator.createTables()
+#DataGenerator.initializeStatic()
+DataGenerator.initializeNonStatic()
 
 
 '''
