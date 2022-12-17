@@ -1,6 +1,6 @@
 import psycopg2
 import random
-
+import openpyxl
 
 def initializeStatic():
     conn = psycopg2.connect(
@@ -311,3 +311,189 @@ def addEvents(connection):
     #   connection.commit()
 
     return 0
+
+def makeStudentsTakeCourses(semester,year,conn):
+    cur = conn.cursor()
+
+    gettingStudentIds = "Select Major, lNumber FROM student_profile"
+
+    cur.execute(gettingStudentIds)
+    #print("Selecting rows from mobile table using cursor.fetchall")
+    infos = cur.fetchall()
+
+    for info in infos:
+        # #print(info)
+        major = info[0]
+        id = info[1]
+        studentCourses = "Select sectNum FROM student_courses WHERE lNumber="+str(id)
+        cur.execute(studentCourses)
+        sections = cur.fetchall()
+        # if len(sections) > 0:
+        #     print(sections[len(sections)-1][0])
+
+        if len(sections) == 0:
+            if major == "CS":
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=1001"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                fstCourse = sectionNumber
+                # #print(fstCourse)
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=1002"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                sndCourse = sectionNumber
+                # #print(sndCourse)
+                insertCourse1 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",1001,"+str(fstCourse)+")"
+                insertCourse2 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",1002,"+str(sndCourse)+")"
+                print(insertCourse1)
+                print(insertCourse2)
+                cur.execute(insertCourse1)
+                conn.commit()
+                cur.execute(insertCourse2)
+                conn.commit()
+            if major == "ECON":
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=2001"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                fstCourse = sectionNumber
+                #print(fstCourse)
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=2002"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                sndCourse = sectionNumber
+                #print(sndCourse)
+                insertCourse1 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",2001,"+str(fstCourse)+")"
+                insertCourse2 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",2002,"+str(sndCourse)+")"
+                print(insertCourse1)
+                print(insertCourse2)
+                cur.execute(insertCourse1)
+                conn.commit()
+                cur.execute(insertCourse2)
+                conn.commit()
+            if major == "MATH":
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=3001"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                fstCourse = sectionNumber
+                #print(fstCourse)
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN=3002"
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                sndCourse = sectionNumber
+                #print(sndCourse)
+                insertCourse1 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",3001,"+str(fstCourse)+")"
+                insertCourse2 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+",3002,"+str(sndCourse)+")"
+                print(insertCourse1)
+                print(insertCourse2)
+                cur.execute(insertCourse1)
+                conn.commit()
+                cur.execute(insertCourse2)
+                conn.commit()
+        else:
+            lastSection = sections[len(sections)-1][0]
+            last_digit = int(repr(lastSection)[-2])
+            isOne = int(repr(lastSection)[-3])
+            if last_digit+2 > 6 and isOne == 1:
+                print("the student have graduated")
+            else:
+                csClasses = "Select courseCRN FROM student_courses WHERE sectNum="+str(lastSection)
+                cur.execute(csClasses)
+                courses = cur.fetchall()
+                course = courses[0][0]
+                course1 = course+1
+                course2 = course+2
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN="+str(course1)
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                fstCourse = sectionNumber
+                #print(fstCourse)
+                csClasses = "Select courseSect FROM course_profile WHERE courseCRN="+str(course2)
+                cur.execute(csClasses)
+                sections = cur.fetchall()
+                max = len(sections)
+                pickSection = random.randint(0,max-1)
+                sectionNumber = sections[pickSection][0]
+                sndCourse = sectionNumber
+                # print("here:"+str(sndCourse))
+                insertCourse1 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+","+str(course1)+","+str(fstCourse)+")"
+                insertCourse2 = "INSERT INTO student_courses Values("+str(id)+",'"+semester+"',"+str(year)+","+str(course2)+","+str(sndCourse)+")"
+                print(insertCourse1)
+                print(insertCourse2)
+                cur.execute(insertCourse1)
+                conn.commit()
+                cur.execute(insertCourse2)
+                conn.commit()
+
+def giveStudentsGrades(conn):
+    cur = conn.cursor()
+    for info in infos:
+        # print(info)
+        major = info[0]
+        id = info[1]
+        studentCourses = "Select sectNum FROM student_courses WHERE lNumber="+str(id)
+        cur.execute(studentCourses)
+        sections = cur.fetchall()
+        beforeLastCourse = sections[len(sections)-2][0]
+        lastCourse = sections[len(sections)-1][0]
+
+        grade1 = general("Grade")
+        grade2 = general("Grade")
+
+        insertGrade1 = "INSERT INTO grade_report Values("+str(id)+","+str(beforeLastCourse)+","+str(grade1)+")"
+        insertGrade2 = "INSERT INTO grade_report Values("+str(id)+","+str(lastCourse)+","+str(grade2)+")"
+        print(insertGrade1)
+        print(insertGrade2)
+        cur.execute(insertGrade1)
+        conn.commit()
+        cur.execute(insertGrade2)
+        conn.commit()
+
+def general(colName):
+    path = "C://Users//User//Desktop//CS320//FinalProject//CollegeSimulationPostgres//Data//General.xlsx"
+
+    wb_obj = openpyxl.load_workbook(path)
+    sheet_obj = wb_obj["Sheet1"]  
+
+    generalCols = {}
+    col = 1
+    row = 1
+    while(sheet_obj.cell(column=col, row=1).value != None):
+        name = sheet_obj.cell(column=col, row=1).value
+        generalCols[name] = col
+        col = col + 1 
+
+    colist = ["A","B","C","D","E","F","G","H","I",]
+
+    colNum = generalCols[colName]
+    colIndex = colNum -1
+
+    colLength = 0
+    for cell in sheet_obj[colist[colIndex]]:
+        if cell.value == None:
+            break
+        colLength = colLength + 1
+
+    row = random.randint(2,colLength)
+    value = sheet_obj.cell(column=colNum, row=row).value
+    return value
