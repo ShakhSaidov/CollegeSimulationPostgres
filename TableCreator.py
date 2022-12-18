@@ -204,10 +204,7 @@ students = (
         mealPlan        INT NOT NULL,
         termGPA         INT NOT NULL,
         resHall         VARCHAR(1024) NOT NULL,
-        resHallNum      INT NOT NULL,
         roomNum         INT NOT NULL,
-        addressName     VARCHAR(1024) NOT NULL,
-        addressNum      INT NOT NULL,
         PRIMARY KEY(lNumber)
     )""",
 
