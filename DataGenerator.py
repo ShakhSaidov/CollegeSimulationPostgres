@@ -26,7 +26,7 @@ def initializeStatic():
     addMajorCourseReq(conn)
     addResLifeStaff(conn)
     addStaffProfile(conn)
-    addStudentProfile(conn)
+    #addStudentProfile(conn)
 
     conn.close()
 
@@ -213,9 +213,10 @@ def addStaffProfile(connection):
 # populating student profile table
 
 
-def addStudentProfile(connection):
+def addStudentProfile(connection, addition):
     cur = connection.cursor()
 
+    #make it increment by 100
     with open('Data/StudentProfile.csv', 'r') as f:
         next(f)  # Skip the header row.
         cur.copy_from(f, 'student_profile', sep=',')
@@ -227,20 +228,21 @@ def addStudentProfile(connection):
 # ||||||||||||||||||||||||||||||||||||
 
 
-def initializeNonStatic():
+def initializeNonStatic(semester, year, addition):
     conn = psycopg2.connect(
         host="localhost",
         database="Simulation",
         user="postgres",
         password="postgre$320")
 
-    addStudentJobs(conn)
-    makeStudentsTakeCourses("Fall",2026,conn)
-    addClubMembers(conn)
+    #addStudentProfile(conn, addition)
+    #addStudentJobs(conn)
+    #makeStudentsTakeCourses(semester, year, conn)
+    #addClubMembers(conn)
     addEvents(conn)
 
-    #!!!!giveStudentsGrades(conn)
-    #addStudentSemester
+    #giveStudentsGrades(conn)
+    #addStudentSemester(semester, year, conn)
 
     conn.close()
 
@@ -461,8 +463,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",1001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",1002,"+str(sndCourse)+")"
-                print(insertCourse1)
-                print(insertCourse2)
+                #print(insertCourse1)
+                #print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -488,8 +490,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",2001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",2002,"+str(sndCourse)+")"
-                print(insertCourse1)
-                print(insertCourse2)
+                #print(insertCourse1)
+                #print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -515,8 +517,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",3001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",3002,"+str(sndCourse)+")"
-                print(insertCourse1)
-                print(insertCourse2)
+                #print(insertCourse1)
+                #print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -557,8 +559,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+","+str(course1)+","+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+","+str(course2)+","+str(sndCourse)+")"
-                print(insertCourse1)
-                print(insertCourse2)
+                #print(insertCourse1)
+                #print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -591,8 +593,8 @@ def giveStudentsGrades(conn):
             id)+","+str(beforeLastCourse)+","+str(grade1)+")"
         insertGrade2 = "INSERT INTO grade_report Values("+str(
             id)+","+str(lastCourse)+","+str(grade2)+")"
-        print(insertGrade1)
-        print(insertGrade2)
+        #print(insertGrade1)
+        #print(insertGrade2)
         cur.execute(insertGrade1)
         conn.commit()
         cur.execute(insertGrade2)
@@ -604,7 +606,6 @@ def general(colName):
 
     wb_obj = openpyxl.load_workbook(path)
     sheet_obj = wb_obj["Sheet1"]
-    print("SHEETOBJ: ", sheet_obj)
 
     generalCols = {}
     col = 1
@@ -626,8 +627,6 @@ def general(colName):
         colLength = colLength + 1
 
     row = random.randint(2, colLength)
-    print("RANDOMROW: ", row)
     finalValue = sheet_obj.cell(column=colNum, row=row).value
-    print("FINAL VALUE: ", finalValue)
 
     return finalValue

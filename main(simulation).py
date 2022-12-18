@@ -2,14 +2,11 @@ import psycopg2
 import DataGenerator
 import TableCreator
 
-#create tables 
 #TableCreator.createTables()
 #DataGenerator.initializeStatic()
-DataGenerator.initializeNonStatic()
+DataGenerator.initializeNonStatic("Fall", 2026, 100)
 
-
-'''
-
+"""
 # Connect to DB
 conn = psycopg2.connect(
     host="localhost",
@@ -38,12 +35,12 @@ def yearEnd():
 
 season = ["Fall","Spring"]
 
-for year in range (2015,2020):
+addition = 0
+for year in range (2019,2020):
     for semester in season:
         print("It is "+semester+", "+str(year))
-        yearStart()
-        yearMiddle()
-        yearEnd()
+        DataGenerator.initializeNonStatic(semester, year, addition)
+        addition += 100
 
 # Capture the final state of the DB and put in the report
 
@@ -56,7 +53,6 @@ cur.close()
 
 conn.close()
 
-'''
-
+"""
 
 
