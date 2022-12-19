@@ -27,7 +27,7 @@ DataGenerator.initializeSemesterStart("Spring", 2026, addition+100, conn)
 DataGenerator.initializeSemesterEnd("Spring", 2026, conn)
 """
 
-#Simulation loop, 10 years from 2026-2035
+#Simulation loop, 10 years from 2022-2032
 for year in range (2022,2032):
     for semester in season:
         print("Current Time: " + semester + ", " + str(year))

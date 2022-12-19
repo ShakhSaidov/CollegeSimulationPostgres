@@ -6,6 +6,7 @@ from pandas import *
 # populating global college campus data that will not change throughout the simulation
 def populateGlobalData(conn):
     #static
+    print("Building college entities: Clubs, Courses, Departments, Majors, ResidenceHalls, Libraries, Staffs...")
     addClubs(conn)
     addCourseAtt(conn)
     addCourseInfo(conn)
@@ -23,10 +24,17 @@ def populateGlobalData(conn):
     addStaffProfile(conn)
 
 def initializeSemesterStart(semester, year, addition, conn):    
+    print("Adding new students to the database...")
     addStudentProfile(conn, addition)
+
+    print("Assigning random students random jobs and clubs...")
     addStudentJobs(conn, addition)
     addClubMembers(conn, addition)
+
+    print("Randomly creating events...")
     addEvents(semester, year, conn)
+
+    print("Making random students request random services from random Libraries...")
     makeLibraryService(conn)
     makeLibraryItemLoan(conn,year)
     
@@ -216,8 +224,11 @@ def addStaffProfile(connection):
 
 
 def initializeSemesterEnd(semester, year, conn):
+    print("Making students take random courses. 2 courses per semester...")
     makeStudentsTakeCourses(semester, year, conn)
+    print("Assigning students random grades...")
     giveStudentsGrades(conn)
+    print("Updating all students' semester progress...")
     addStudentSemester(semester, year, conn)
 
 
