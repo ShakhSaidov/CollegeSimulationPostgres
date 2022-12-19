@@ -15,7 +15,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 season = ["Fall","Spring"]
-addition = 100
+addition = 50
 
 #Populating global college campus data that will not change throughout the simulation
 DataGenerator.populateGlobalData(conn)
@@ -35,7 +35,7 @@ for year in range (2026,2035):
         DataGenerator.initializeSemesterStart(semester, year, addition, conn)
         DataGenerator.initializeSemesterEnd(semester, year, conn)
 
-        addition += 100
+        addition += 50
 
 # Closing the connection to the Database
 cur.close()

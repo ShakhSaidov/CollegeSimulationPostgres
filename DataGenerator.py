@@ -226,7 +226,7 @@ def addStudentProfile(connection, addition):
     file = read_csv('Data/StudentProfile.csv')
     cur = connection.cursor()
 
-    for i in range(addition-100, addition):
+    for i in range(addition-50, addition):
         values = (
             file['L_number'][i].astype(Int64Dtype), 
             file['Department'][i], 
@@ -261,7 +261,7 @@ def addClubMembers(connection, addition):
     memberTitles = general['Member Title'].tolist()
     memberTitles = [x for x in memberTitles if str(x) != 'nan']
 
-    for i in range(addition-100, addition):
+    for i in range(addition-50, addition):
         currentStudent = studentsList[i]
         randomClub = random.randint(0, len(clubList))
         randomMemberTitle = random.randint(0, len(memberTitles))
@@ -292,7 +292,7 @@ def addStudentJobs(connection, addition):
     jobDeptNameList = cur.fetchall()
     jobDeptNameList = [x[0] for x in jobDeptNameList]
 
-    for i in range(addition-100, addition):
+    for i in range(addition-50, addition):
         currentStudent = studentsList[i]
         randomJob = random.randint(0, len(jobsList))
 
@@ -380,6 +380,14 @@ def addStudentSemester(semester, year, connection):
     count = 1
     while (count < len(studentsList)):
         currentStudent = studentsList[count]
+
+        studentCourses = "Select sectNum FROM student_courses WHERE lNumber=" + str(currentStudent)
+        cur.execute(studentCourses)
+        sections = cur.fetchall()
+
+        #if people have graduated
+        if(len(sections) >= 16):
+            continue
 
         randomFinancialType = random.randint(0, len(financialTypes))
         randomEnrolStatus = random.randint(0, len(enrolStatuses))
@@ -579,6 +587,11 @@ def giveStudentsGrades(conn):
             str(id)
         cur.execute(studentCourses)
         sections = cur.fetchall()
+
+        #if people have graduated
+        if(len(sections) >= 16):
+            continue
+
         beforeLastCourse = sections[len(sections)-2][0]
         lastCourse = sections[len(sections)-1][0]
 
