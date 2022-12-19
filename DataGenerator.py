@@ -24,8 +24,8 @@ def populateGlobalData(conn):
 
 def initializeSemesterStart(semester, year, addition, conn):    
     addStudentProfile(conn, addition)
-    addStudentJobs(conn)
-    addClubMembers(conn)
+    addStudentJobs(conn, addition)
+    addClubMembers(conn, addition)
     addEvents(semester, year, conn)
     makeLibraryService(conn)
     makeLibraryItemLoan(conn,year)
@@ -245,7 +245,7 @@ def addStudentProfile(connection, addition):
     
 
 # populating student club members
-def addClubMembers(connection):
+def addClubMembers(connection, addition):
     cur = connection.cursor()
     connection.autocommit = True
 
@@ -261,11 +261,8 @@ def addClubMembers(connection):
     memberTitles = general['Member Title'].tolist()
     memberTitles = [x for x in memberTitles if str(x) != 'nan']
 
-    studentWithClubsAmount = random.randint(0, len(studentsList) / 2)
-    count = 1
-
-    while (count < studentWithClubsAmount):
-        currentStudent = studentsList[count]
+    for i in range(addition-100, addition):
+        currentStudent = studentsList[i]
         randomClub = random.randint(0, len(clubList))
         randomMemberTitle = random.randint(0, len(memberTitles))
 
@@ -276,12 +273,10 @@ def addClubMembers(connection):
         insertValues = (currentStudent, currentClub, currentMemberTitle)
         cur.execute(query, insertValues)
 
-        count += 1
-
 # populating student jobs
 
 
-def addStudentJobs(connection):
+def addStudentJobs(connection, addition):
     cur = connection.cursor()
     connection.autocommit = True
 
@@ -297,11 +292,8 @@ def addStudentJobs(connection):
     jobDeptNameList = cur.fetchall()
     jobDeptNameList = [x[0] for x in jobDeptNameList]
 
-    studentWithJobsAmount = random.randint(0, len(studentsList) / 2)
-    count = 1
-
-    while (count < studentWithJobsAmount):
-        currentStudent = studentsList[count]
+    for i in range(addition-100, addition):
+        currentStudent = studentsList[i]
         randomJob = random.randint(0, len(jobsList))
 
         currentJob = jobsList[randomJob-1]
@@ -310,8 +302,6 @@ def addStudentJobs(connection):
         query = """INSERT INTO student_job VALUES (%s,%s,%s)"""
         insertValues = (currentStudent, currentJob, currentJobDeptName)
         cur.execute(query, insertValues)
-
-        count += 1
 
 # adding events
 
@@ -533,7 +523,8 @@ def makeStudentsTakeCourses(semester, year, conn):
             last_digit = int(repr(lastSection)[-2])
             isOne = int(repr(lastSection)[-3])
             if last_digit+2 > 6 and isOne == 1:
-                print("the student have graduated")
+                continue
+                #print("the student have graduated")
             else:
                 csClasses = "Select courseCRN FROM student_courses WHERE sectNum=" + \
                     str(lastSection)
@@ -643,19 +634,20 @@ def makeLibraryItemLoan(conn,year):
         # print(insertLoan)
         cur.execute(insertLoan)
         conn.commit()
+
 def makeLibraryService(conn):
     cur = conn.cursor()
     gettingStudentIds = "Select Major, lNumber FROM student_profile"
     cur.execute(gettingStudentIds)
     infos = cur.fetchall()
+    
     #make Library service
     getLibraryIds = "Select libraryID FROM libraries"
-
     cur.execute(getLibraryIds)
     #print("Selecting rows from mobile table using cursor.fetchall")
     libList = cur.fetchall()
+
     for i in range(0,11):
-        serviceId=serviceId+1
         pickStudent = random.randint(0,len(infos))
         pickLibrary = random.randint(0,1)
         # print(pickStudent)

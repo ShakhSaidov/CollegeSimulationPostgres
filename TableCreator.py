@@ -124,7 +124,6 @@ libraryServices = (
     )""",
 
     """CREATE TABLE library_items(
-        loanId          SERIAL PRIMARY KEY,
         itemID          INT NOT NULL,
         itemType        VARCHAR(1024) NOT NULL,
         itemName        VARCHAR(1024) NOT NULL,
@@ -139,13 +138,13 @@ libraryServices = (
     )""",
 
     """CREATE TABLE library_loans(
+        loanID          SERIAL PRIMARY KEY,
         itemID          INT NOT NULL,
         libraryID       INT NOT NULL,
         lNumber         BIGINT NOT NULL,
         dateOut         VARCHAR(1024) NOT NULL,
         dateDue         VARCHAR(1024) NOT NULL,
-        dateIn          VARCHAR(1024) NOT NULL,
-        PRIMARY KEY(itemId)
+        dateIn          VARCHAR(1024) NOT NULL
     )"""
 )
 residenceHalls = (
@@ -204,7 +203,7 @@ students = (
         termGPA         INT NOT NULL,
         resHall         VARCHAR(1024) NOT NULL,
         roomNum         INT NOT NULL,
-        PRIMARY KEY(lNumber)
+        PRIMARY KEY(lNumber, semester, year)
     )""",
 
     """CREATE TABLE student_job(
@@ -222,7 +221,7 @@ def createTables():
     createTable(residenceHalls)
     createTable(students)
 
-# functoin that creates tables based on the bassed entity array
+# function that creates tables based on the bassed entity array
 def createTable(entities):
     conn = None
     try:

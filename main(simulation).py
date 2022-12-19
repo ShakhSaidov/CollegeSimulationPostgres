@@ -20,16 +20,22 @@ addition = 100
 #Populating global college campus data that will not change throughout the simulation
 DataGenerator.populateGlobalData(conn)
 
+"""
+DataGenerator.initializeSemesterStart("Fall", 2026, addition, conn)
+DataGenerator.initializeSemesterEnd("Fall", 2026, conn)
+DataGenerator.initializeSemesterStart("Spring", 2026, addition+100, conn)
+DataGenerator.initializeSemesterEnd("Spring", 2026, conn)
+"""
+
 #Simulation loop, 10 years from 2026-2035
 for year in range (2026,2035):
     for semester in season:
         print("Current Time: " + semester + ", " + str(year))
         
-        DataGenerator.initializeSemesterStart(semester, 2026, addition, conn)
-        DataGenerator.initializeSemesterEnd(semester, 2026, conn)
+        DataGenerator.initializeSemesterStart(semester, year, addition, conn)
+        DataGenerator.initializeSemesterEnd(semester, year, conn)
 
         addition += 100
-
 
 # Closing the connection to the Database
 cur.close()
