@@ -187,7 +187,7 @@ students = (
         dob             DATE NOT NULL,
         major           VARCHAR(1024) NOT NULL,
         email           VARCHAR(1024) NOT NULL,
-        year            VARCHAR(1024) NOT NULL,
+        year            INT NOT NULL,
         phone           VARCHAR(1024) NOT NULL,
         emergencyNum    VARCHAR(1024) NOT NULL,
         PRIMARY KEY(lNumber)

@@ -354,7 +354,7 @@ def addStudentSemester(semester, year, connection):
     cur = connection.cursor()
     connection.autocommit = True
 
-    cur.execute("SELECT lnumber from student_profile")
+    cur.execute("SELECT lnumber FROM student_profile WHERE year > " + str(year))
     studentsList = cur.fetchall()
     studentsList = [x[0] for x in studentsList]
 
@@ -380,14 +380,6 @@ def addStudentSemester(semester, year, connection):
     count = 1
     while (count < len(studentsList)):
         currentStudent = studentsList[count]
-
-        studentCourses = "Select sectNum FROM student_courses WHERE lNumber=" + str(currentStudent)
-        cur.execute(studentCourses)
-        sections = cur.fetchall()
-
-        #if people have graduated
-        if(len(sections) >= 16):
-            continue
 
         randomFinancialType = random.randint(0, len(financialTypes))
         randomEnrolStatus = random.randint(0, len(enrolStatuses))
