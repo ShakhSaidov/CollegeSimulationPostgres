@@ -602,7 +602,70 @@ def giveStudentsGrades(conn):
         cur.execute(insertGrade2)
         conn.commit()
 
+def makeLibraryItemLoan(conn,year):
+    cur = conn.cursor()
+    gettingStudentIds = "Select Major, lNumber FROM student_profile"
+    cur.execute(gettingStudentIds)
+    infos = cur.fetchall()
+    getLibraryIds = "Select libraryID FROM libraries"
+    getIteamIds = "Select libraryID FROM libraries"
+    cur.execute(getLibraryIds)
+    #print("Selecting rows from mobile table using cursor.fetchall")
+    libList = cur.fetchall()
+    cur.execute(getIteamIds)
+    itemList = cur.fetchall()
+    for i in range(0,11):
+        pickStudent = random.randint(0,len(infos)-1)
+        pickIteam = random.randint(0,len(itemList)-1)
+        pickLibrary = random.randint(0,1)
+        studentID = infos[pickStudent][1]
+        libraryID = libList[pickLibrary][0]
+        itemID = itemList[pickIteam][0]
+        yearOut = random.randint(2010,year)
+        dayOut = random.randint(1,30)
+        monthOut = random.randint(1,12)
+        dateOut = str(monthOut)+"/"+str(dayOut)+"/"+str(yearOut)
+        # print("dateOut: "+dateOut)
+        yearDue = random.randint(yearOut,year)
+        dayDue = random.randint(1,30)
+        monthDue = random.randint(1,12)
+        dateDue = str(monthDue)+"/"+str(dayDue)+"/"+str(yearDue)
+        # print("dateDue: "+dateDue)
+        yearIn = random.randint(yearOut,yearDue)
+        dayIn = random.randint(1,30)
+        monthIn = random.randint(1,12)
+        dateIn = str(monthIn)+"/"+str(dayIn)+"/"+str(yearIn)
+        # print("dateIn: "+dateIn)
+        insertLoan = "INSERT INTO library_loans Values(DEFAULT,"+str(itemID)+","+str(libraryID)+","+str(studentID)+",'"+str(dateOut)+"','"+str(dateIn)+"','"+str(dateDue)+"')"
+        # print(insertLoan)
+        cur.execute(insertLoan)
+        conn.commit()
+def makeLibraryService(conn,year):
+    cur = conn.cursor()
+    gettingStudentIds = "Select Major, lNumber FROM student_profile"
+    cur.execute(gettingStudentIds)
+    infos = cur.fetchall()
+    #make Library service
+    getLibraryIds = "Select libraryID FROM libraries"
 
+    cur.execute(getLibraryIds)
+    #print("Selecting rows from mobile table using cursor.fetchall")
+    libList = cur.fetchall()
+    for i in range(0,11):
+        serviceId=serviceId+1
+        pickStudent = random.randint(0,len(infos))
+        pickLibrary = random.randint(0,1)
+        # print(pickStudent)
+        studentID = infos[pickStudent][1]
+        libraryID = libList[pickLibrary][0]
+        # print(studentID)
+        # print(libraryID)
+        serviceName = general("Service Name")
+        insertCourse1 = "INSERT INTO library_services Values(DEFAULT,"+str(studentID)+",'"+serviceName+"',"+str(libraryID)+")"
+        # print(insertCourse1)
+        cur.execute(insertCourse1)
+        conn.commit()
+        
 def general(colName):
     path = "D:\CS\CollegeSimulationPostgres\Data\General.xlsx"
 
