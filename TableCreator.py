@@ -124,19 +124,18 @@ libraryServices = (
     )""",
 
     """CREATE TABLE library_items(
+        loanId          SERIAL PRIMARY KEY,
         itemID          INT NOT NULL,
         itemType        VARCHAR(1024) NOT NULL,
         itemName        VARCHAR(1024) NOT NULL,
-        libraryID       INT NOT NULL,
-        PRIMARY KEY(itemID)
+        libraryID       INT NOT NULL
     )""",
 
     """CREATE TABLE library_services(
-        serviceID       INT NOT NULL,
+        serviceID       SERIAL PRIMARY KEY,
         lNumber         BIGINT NOT NULL,
         serviceName     VARCHAR(1024) NOT NULL,
-        libraryID       INT NOT NULL,
-        PRIMARY KEY(serviceID)
+        libraryID       INT NOT NULL
     )""",
 
     """CREATE TABLE library_loans(
