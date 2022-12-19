@@ -2,12 +2,10 @@ import psycopg2
 import DataGenerator
 import TableCreator
 
-#TableCreator.createTables()
-#DataGenerator.initializeStatic()
-DataGenerator.initializeNonStatic("Fall", 2026, 100)
+#first, creating empty tables for all the entities we will be working with
+TableCreator.createTables()
 
-"""
-# Connect to DB
+# Connecting to the Database
 conn = psycopg2.connect(
     host="localhost",
     database="Simulation",
@@ -16,43 +14,25 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-def yearStart():
-    cur.execute(DataGenerator.addStudents())
-    cur.execute(DataGenerator.addClasses())
-    ...
-
-
-def yearMiddle():
-    cur.execute(DataGenerator.assignGrades())
-    cur.execute(DataGenerator.changeHalls())
-    ...
-
-
-def yearEnd():
-    cur.execute(DataGenerator.levelUpStudents())
-    cur.execute(DataGenerator.assignGrades())
-    ...
-
 season = ["Fall","Spring"]
+addition = 100
 
-addition = 0
-for year in range (2019,2020):
+#Populating global college campus data that will not change throughout the simulation
+DataGenerator.populateGlobalData(conn)
+
+#Simulation loop, 10 years from 2026-2035
+for year in range (2026,2035):
     for semester in season:
-        print("It is "+semester+", "+str(year))
-        DataGenerator.initializeNonStatic(semester, year, addition)
+        print("Current Time: " + semester + ", " + str(year))
+        
+        DataGenerator.initializeSemesterStart(semester, 2026, addition, conn)
+        DataGenerator.initializeSemesterEnd(semester, 2026, conn)
+
         addition += 100
 
-# Capture the final state of the DB and put in the report
 
-# display the PostgreSQL database server version
-#db_version = cur.fetchone()
-#print(db_version)
-
-# close the communication with the PostgreSQL
+# Closing the connection to the Database
 cur.close()
-
 conn.close()
-
-"""
 
 

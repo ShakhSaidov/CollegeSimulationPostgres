@@ -3,14 +3,9 @@ import random
 import openpyxl
 from pandas import *
 
-
-def initializeStatic():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="Simulation",
-        user="postgres",
-        password="postgre$320")
-
+# populating global college campus data that will not change throughout the simulation
+def populateGlobalData(conn):
+    #static
     addClubs(conn)
     addCourseAtt(conn)
     addCourseInfo(conn)
@@ -26,13 +21,14 @@ def initializeStatic():
     addMajorCourseReq(conn)
     addResLifeStaff(conn)
     addStaffProfile(conn)
-    #addStudentProfile(conn)
 
-    conn.close()
+def initializeSemesterStart(semester, year, addition, conn):    
+    addStudentProfile(conn, addition)
+    addStudentJobs(conn)
+    addClubMembers(conn)
+    addEvents(semester, year, conn)
 
 # populating clubs table
-
-
 def addClubs(connection):
     cur = connection.cursor()
 
@@ -210,42 +206,40 @@ def addStaffProfile(connection):
 
     connection.commit()
 
-# populating student profile table
-
-
-def addStudentProfile(connection, addition):
-    cur = connection.cursor()
-
-    #make it increment by 100
-    with open('Data/StudentProfile.csv', 'r') as f:
-        next(f)  # Skip the header row.
-        cur.copy_from(f, 'student_profile', sep=',')
-
-    connection.commit()
 
 # ||||||||||||||||||||||||||||||||||||
 # NON-STATIC DATA
 # ||||||||||||||||||||||||||||||||||||
 
 
-def initializeNonStatic(semester, year, addition):
-    conn = psycopg2.connect(
-        host="localhost",
-        database="Simulation",
-        user="postgres",
-        password="postgre$320")
+def initializeSemesterEnd(semester, year, conn):
+    makeStudentsTakeCourses(semester, year, conn)
+    giveStudentsGrades(conn)
+    addStudentSemester(semester, year, conn)
 
-    #addStudentProfile(conn, addition)
-    #addStudentJobs(conn)
-    #makeStudentsTakeCourses(semester, year, conn)
-    #addClubMembers(conn)
-    addEvents(conn)
 
-    #giveStudentsGrades(conn)
-    #addStudentSemester(semester, year, conn)
+# populating student profile table
+def addStudentProfile(connection, addition):
+    file = read_csv('Data/StudentProfile.csv')
+    cur = connection.cursor()
 
-    conn.close()
+    for i in range(addition-100, addition):
+        values = (
+            file['L_number'][i].astype(Int64Dtype), 
+            file['Department'][i], 
+            file['first_name'][i], 
+            file['last_name'][i], 
+            file['DOB'][i],
+            file['Major'][i],
+            file['Email'][i],
+            file['Year'][i].astype(Int64Dtype),
+            file['Phone_#'][i],
+            file['Emergency_Phone_#'][i]
+            )
 
+        cur.execute("INSERT INTO student_profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", values)
+        connection.commit()
+    
 
 # populating student club members
 def addClubMembers(connection):
@@ -317,7 +311,9 @@ def addStudentJobs(connection):
         count += 1
 
 # adding events
-def addEvents(connection):
+
+
+def addEvents(semester, year, connection):
     cur = connection.cursor()
     connection.autocommit = True
 
@@ -329,33 +325,37 @@ def addEvents(connection):
     eventLocations = events['Location'].tolist()
     eventLocations = [x for x in eventLocations if str(x) != 'nan']
 
-    eventDates = events['Date'].tolist()
-    eventDates = [x for x in eventDates if str(x) != 'nan']
-
     cur.execute("SELECT clubid from clubs")
     clubList = cur.fetchall()
     clubList = [x[0] for x in clubList]
 
-    clubsWithEventsAmount = random.randint(0, len(clubList) - 1)
+    clubsWithEventsAmount = random.randint(1, len(clubList) - 1)
     count = 1
 
     while (count < clubsWithEventsAmount):
         randomName = random.randint(0, len(eventNames))
         randomLocation = random.randint(0, len(eventLocations))
-        randomDate = random.randint(0, len(eventDates))
         randomClub = random.randint(0, len(clubList))
 
         currentClub = clubList[randomClub-1]
-        currentEvent = currentClub * 100
-        currentName  = eventNames[randomName-1]
-        currentLocation  = eventLocations[randomLocation-1]
-        currentDate  = eventDates[randomDate-1]
+        currentEvent = currentClub * random.randint(1,10000)
+        currentName = eventNames[randomName-1]
+        currentLocation = eventLocations[randomLocation-1]
+
+        if(semester == "Fall"):  
+            randomMonth = random.randint(8, 12)
+        else:
+            randomMonth = random.randint(1, 5)
+        randomDay = random.randint(1, 28)
+        currentDate = f"{randomMonth}/{randomDay}/{year}"
 
         query = """INSERT INTO events VALUES (%s,%s,%s,%s,%s)"""
-        insertValues = (currentEvent, currentName, currentLocation, currentDate, currentClub)
+        insertValues = (currentEvent, currentName,
+                        currentLocation, currentDate, currentClub)
         cur.execute(query, insertValues)
 
         count += 1
+
 
 def addStudentSemester(semester, year, connection):
     cur = connection.cursor()
@@ -372,13 +372,13 @@ def addStudentSemester(semester, year, connection):
     cur.execute("SELECT roomnumber from hall_room")
     roomsList = cur.fetchall()
     roomsList = [x[0] for x in roomsList]
-    
+
     general = read_csv("Data/General.csv")
 
     financialTypes = general['Financial Type'].tolist()
     financialTypes = [x for x in financialTypes if str(x) != 'nan']
 
-    enrolStatuses = general['Enrolment Status'].tolist()
+    enrolStatuses = general['Enrollment Status'].tolist()
     enrolStatuses = [x for x in enrolStatuses if str(x) != 'nan']
 
     mealPlans = general['Meal Plan Per Week'].tolist()
@@ -387,7 +387,7 @@ def addStudentSemester(semester, year, connection):
     count = 1
     while (count < len(studentsList)):
         currentStudent = studentsList[count]
-        
+
         randomFinancialType = random.randint(0, len(financialTypes))
         randomEnrolStatus = random.randint(0, len(enrolStatuses))
         randomMealPlan = random.randint(0, len(mealPlans))
@@ -399,27 +399,29 @@ def addStudentSemester(semester, year, connection):
         currentHall = hallsList[randomHall-1]
         currentRoom = roomsList[randomHall-1]
 
-        cur.execute("SELECT grade FROM grade_report WHERE lnumber = %s", [currentStudent])
+        cur.execute("SELECT grade FROM grade_report WHERE lnumber = %s", [
+                    currentStudent])
         allGrades = cur.fetchall()
         allGrades = [x[0] for x in allGrades]
         gradesSum = sum(float(i) for i in allGrades)
         termGrade = gradesSum / len(allGrades)
 
-        query = """INSERT INTO student_semester VALUES (%s,%s,%s)"""
+        query = """INSERT INTO student_semester VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
         insertValues = (
-            currentStudent, 
-            semester, 
-            year, 
-            currentFinancialType, 
-            currentEnrolStatus, 
+            currentStudent,
+            semester,
+            year,
+            currentFinancialType,
+            currentEnrolStatus,
             currentMealPlan,
             termGrade,
             currentHall,
             currentRoom
-            )
+        )
         cur.execute(query, insertValues)
 
         count += 1
+
 
 def makeStudentsTakeCourses(semester, year, conn):
     cur = conn.cursor()
@@ -463,8 +465,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",1001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",1002,"+str(sndCourse)+")"
-                #print(insertCourse1)
-                #print(insertCourse2)
+                # print(insertCourse1)
+                # print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -490,8 +492,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",2001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",2002,"+str(sndCourse)+")"
-                #print(insertCourse1)
-                #print(insertCourse2)
+                # print(insertCourse1)
+                # print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -517,8 +519,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+",3001,"+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+",3002,"+str(sndCourse)+")"
-                #print(insertCourse1)
-                #print(insertCourse2)
+                # print(insertCourse1)
+                # print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -559,8 +561,8 @@ def makeStudentsTakeCourses(semester, year, conn):
                     id)+",'"+semester+"',"+str(year)+","+str(course1)+","+str(fstCourse)+")"
                 insertCourse2 = "INSERT INTO student_courses Values("+str(
                     id)+",'"+semester+"',"+str(year)+","+str(course2)+","+str(sndCourse)+")"
-                #print(insertCourse1)
-                #print(insertCourse2)
+                # print(insertCourse1)
+                # print(insertCourse2)
                 cur.execute(insertCourse1)
                 conn.commit()
                 cur.execute(insertCourse2)
@@ -593,8 +595,8 @@ def giveStudentsGrades(conn):
             id)+","+str(beforeLastCourse)+","+str(grade1)+")"
         insertGrade2 = "INSERT INTO grade_report Values("+str(
             id)+","+str(lastCourse)+","+str(grade2)+")"
-        #print(insertGrade1)
-        #print(insertGrade2)
+        # print(insertGrade1)
+        # print(insertGrade2)
         cur.execute(insertGrade1)
         conn.commit()
         cur.execute(insertGrade2)
