@@ -210,8 +210,7 @@ students = (
     """CREATE TABLE student_job(
         lNumber         BIGINT NOT NULL,
         title           VARCHAR(1024) NOT NULL,
-        sponsor         VARCHAR(1024) NOT NULL,
-        PRIMARY KEY(lNumber, title)
+        sponsor         VARCHAR(1024) NOT NULL
     )"""
 )
 

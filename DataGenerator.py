@@ -27,6 +27,9 @@ def initializeSemesterStart(semester, year, addition, conn):
     addStudentJobs(conn)
     addClubMembers(conn)
     addEvents(semester, year, conn)
+    makeLibraryService(conn)
+    makeLibraryItemLoan(conn,year)
+    
 
 # populating clubs table
 def addClubs(connection):
@@ -640,7 +643,7 @@ def makeLibraryItemLoan(conn,year):
         # print(insertLoan)
         cur.execute(insertLoan)
         conn.commit()
-def makeLibraryService(conn,year):
+def makeLibraryService(conn):
     cur = conn.cursor()
     gettingStudentIds = "Select Major, lNumber FROM student_profile"
     cur.execute(gettingStudentIds)
