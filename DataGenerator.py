@@ -678,8 +678,7 @@ def makeLibraryService(conn):
         conn.commit()
         
 def general(colName):
-    path = "D:\CS\CollegeSimulationPostgres\Data\General.xlsx"
-
+    path = ".\Data\General.xlsx"
     wb_obj = openpyxl.load_workbook(path)
     sheet_obj = wb_obj["Sheet1"]
 
